@@ -1,10 +1,10 @@
-# Waste-Classification
+# XAI Material Classifier
 
 A machine learning model that looks at a photo of a piece of waste and classifies **what material it is made of** — cardboard, glass, metal, or plastic — then tells you roughly how long that material takes to decompose.
 
 It also uses **Explainable AI (XAI)** to show *which part of the image* the model looked at when it made its decision.
 
-<a href="https://colab.research.google.com/github/paige-han/Waste-Classification/blob/main/waste_Classification.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+<a href="https://colab.research.google.com/github/paige-han/xai-material-classifier/blob/main/waste_Classification.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 ![XAI result for a plastic bottle](images/xai-plastic-bottle.png)
 
@@ -53,6 +53,22 @@ Each result shows four panels:
 The model only knows four materials. When given a photo of **rubber** (not one of the classes), it still has to pick one — and answered **metal**. The heatmaps show it focused on the dark, shiny edges of the rubber rings, which look similar to metal.
 
 <img src="images/xai-rubber-misclassified.png" alt="Rubber misclassified as metal" width="480"/>
+
+## Why XAI matters
+
+A model with 94% accuracy can still be right for the wrong reasons. Looking at the explanations — not just the score — revealed two things the accuracy number hides:
+
+- **Shortcut cues.** For the glass bottle, Grad-CAM's strongest focus sits partly on the shadow and background above the bottle, not only on the glass itself. The answer was correct, but the evidence was shaky.
+- **Texture over material.** The rubber rings were labeled metal because the model reacted to dark, shiny surfaces rather than what the object is actually made of.
+
+This is the same question at the center of trustworthy AI today: *can people see why a system made a decision, and decide whether to trust it?* In a real setting — such as an automated recycling line — explanations like these are how operators would audit the model, catch failure modes, and know when a human should step in.
+
+## What I'd do next
+
+- **Let the model say "I don't know."** Add a confidence threshold or open-set detection so unfamiliar materials (like rubber) are flagged instead of forced into one of four classes.
+- **Fix the shortcuts the XAI revealed.** Train with more varied backgrounds and lighting, then re-check the heatmaps to confirm the model focuses on the object.
+- **Compare with a vision-language model.** Test a zero-shot model such as CLIP, which classifies from text descriptions without task-specific training, against this ResNet50 baseline.
+- **Design the explanation for people.** Turn the heatmaps into an interface a non-expert can read at a glance — what the model saw, how confident it is, and when to double-check.
 
 ## Tech stack
 
